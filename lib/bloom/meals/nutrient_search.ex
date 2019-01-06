@@ -5,8 +5,20 @@ defmodule Bloom.Meals.NutrientSearch do
 
   @token "5gDWokyKKg7JogI72Sawu3kRFhpUbKbFS6blyCEW"
 
-  def search(term) do
-    get("/search/?#{build_query(term)}")
+  def for_recipe(recipe) do
+    recipe.ingredients
+    |> Enum.map(&(for_ingredient(&1)))
+    |> Enum.map(fn(result) ->
+      case result do
+        {:ok, results} -> results.body
+        {:error, err} -> err
+      end
+    end)
+    |> Enum.zip(recipe.ingredients)
+  end
+
+  def for_ingredient(ingredient) do
+    get("/search/?#{build_query(ingredient.name)}")
   end
 
   defp build_query(term) do

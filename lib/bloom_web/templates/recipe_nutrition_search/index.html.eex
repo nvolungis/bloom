@@ -1,0 +1,14 @@
+<h3>Nutrition Search for <%= @recipe.name %></h3>
+<ul>
+  <%= for ({search_results, ingredient}) <- @nutrition_search do %>
+    <li>
+      <h4><%= ingredient.name %> results</h4>
+      <ul>
+        <%= for result <- search_results["list"]["item"] do %>
+          <li><%= result["name"] %>, <%= result["ndbno"] %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>
+

@@ -17,7 +17,9 @@ defmodule BloomWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/recipes", RecipeController
+    resources "/recipes", RecipeController do
+      resources "/nutrition-search", RecipeNutritionSearchController, only: [:index]
+    end
   end
 
   # Other scopes may use custom stacks.

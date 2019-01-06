@@ -39,14 +39,6 @@ defmodule Bloom.Meals do
   end
 
   def search_recipe_nutrients(%Recipe{} = recipe) do
-    recipe.ingredients
-    |> Enum.map(&(NutrientSearch.search(&1.name)))
-    |> Enum.map(fn(result) ->
-      case result do
-        {:ok, results} -> results.body
-        {:error, err} -> err
-      end
-    end)
-    |> Enum.zip(recipe.ingredients)
+    NutrientSearch.for_recipe(recipe)
   end
 end

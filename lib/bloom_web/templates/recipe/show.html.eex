@@ -27,19 +27,7 @@
   <% end %>
 </ul>
 
-<h3>Nutrition Search</h3>
-<ul>
-  <%= for ({search_results, ingredient}) <- @nutrition do %>
-    <li>
-      <h4><%= ingredient.name %> results</h4>
-      <ul>
-        <%= for result <- search_results["list"]["item"] do %>
-          <li><%= result["name"] %>, <%= result["ndbno"] %></li>
-        <% end %>
-      </ul>
-    </li>
-  <% end %>
-</ul>
+<%= link "search nutrition", to: recipe_recipe_nutrition_search_path(@conn, :index, @recipe) %>
 
 <span><%= link "Edit", to: recipe_path(@conn, :edit, @recipe) %></span>
 <span><%= link "Back", to: recipe_path(@conn, :index) %></span>
