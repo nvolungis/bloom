@@ -2,7 +2,7 @@ defmodule Bloom.Meals do
   import Ecto.Query, warn: false
   alias Bloom.Repo
 
-  alias Bloom.Meals.{Recipe, Ingredient}
+  alias Bloom.Meals.{Recipe, Ingredient, NutrientSearch}
 
   def list_recipes do
     Recipe
@@ -36,5 +36,17 @@ defmodule Bloom.Meals do
 
   def change_recipe(%Recipe{} = recipe) do
     Recipe.changeset(recipe, %{})
+  end
+
+  def search_recipe_nutrients(%Recipe{} = recipe) do
+    recipe.ingredients
+    |> Enum.map(&(NutrientSearch.search(&1.name)))
+    |> Enum.map(fn(result) ->
+      case result do
+        {:ok, results} -> results.body
+        {:error, err} -> err
+      end
+    end)
+    |> Enum.zip(recipe.ingredients)
   end
 end

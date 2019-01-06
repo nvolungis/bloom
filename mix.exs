@@ -41,7 +41,9 @@ defmodule Bloom.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:plug_cowboy, "~> 1.0"},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+      {:tesla, "~> 1.2.1"},
+      {:poison, "~> 3.1"},
     ]
   end
 
