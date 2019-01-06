@@ -1,0 +1,31 @@
+<div class="form-row">
+  <div class="form-group">
+    <%= inputs_for @f, :ingredients, fn i -> %>
+      <div class="row">
+        <div class="form-group col-md-3">
+          <%= label i, :name, class: "control-label" %>
+          <%= text_input i, :name, class: "form-control" %>
+          <%= error_tag i, :name %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= label i, :quantity, class: "control-label" %>
+          <%= text_input i, :quantity, class: "form-control" %>
+          <%= error_tag i, :quantity %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= label i, :unit, class: "control-label" %>
+          <%= text_input i, :unit, class: "form-control" %>
+          <%= error_tag i, :unit %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= label i, :delete, class: "checkbox-inline" do %>
+            <%= checkbox i, :delete %> Delete
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<h2>Show Recipe</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @recipe.name %>
+  </li>
+
+  <li>
+    <strong>Link:</strong>
+    <%= @recipe.link %>
+  </li>
+
+  <li>
+    <strong>Servings:</strong>
+    <%= @recipe.servings %>
+  </li>
+</ul>
+
+<h3>Ingredients</h3>
+<ul>
+  <%= for ingredient <- @recipe.ingredients do %>
+    <li>
+       <b><%= ingredient.name %></b>: <%= ingredient.quantity %> <%= ingredient.unit %>
+    </li>
+  <% end %>
+</ul>
+
+<span><%= link "Edit", to: recipe_path(@conn, :edit, @recipe) %></span>
+<span><%= link "Back", to: recipe_path(@conn, :index) %></span>

@@ -19,3 +19,14 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+var el = document.getElementById('add_ingredient');
+el.onclick = function(e){
+  e.preventDefault()
+  var el = document.getElementById('add_ingredient');
+  let time = new Date().getTime()
+  let template = el.getAttribute('data-template')
+  var uniq_template = template.replace(/\[0]/g, `[${time}]`)
+  uniq_template = uniq_template.replace(/\[0]/g, `_${time}_`)
+  this.insertAdjacentHTML('beforebegin', uniq_template)
+};
