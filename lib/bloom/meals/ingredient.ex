@@ -1,7 +1,7 @@
 defmodule Bloom.Meals.Ingredient do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Bloom.Meals.{Recipe}
+  alias Bloom.Meals.{Recipe, IngredientNutrition}
 
   schema "ingredients" do
     field :name, :string
@@ -9,17 +9,16 @@ defmodule Bloom.Meals.Ingredient do
     field :unit, :string
     field :delete, :boolean, virtual: true
     belongs_to :recipe, Recipe
+    has_one :ingredient_nutrition, IngredientNutrition
 
     timestamps()
   end
 
   @doc false
   def changeset(ingredient, attrs) do
-    IO.inspect("CHANGING")
     ingredient
     |> cast(attrs, [:name, :quantity, :unit, :delete])
     |> maybe_mark_for_deletion()
-    |> IO.inspect()
     |> validate_required([:name, :quantity, :unit])
   end
 

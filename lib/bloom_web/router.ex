@@ -18,7 +18,7 @@ defmodule BloomWeb.Router do
 
     get "/", PageController, :index
     resources "/recipes", RecipeController do
-      resources "/nutrition-search", RecipeNutritionSearchController, only: [:index]
+      resources "/nutrition-search", RecipeNutritionSearchController, only: [:index, :update]
     end
   end
 

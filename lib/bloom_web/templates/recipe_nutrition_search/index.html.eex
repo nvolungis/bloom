@@ -1,14 +1,30 @@
-<h3>Nutrition Search for <%= @recipe.name %></h3>
-<ul>
-  <%= for ({search_results, ingredient}) <- @nutrition_search do %>
-    <li>
-      <h4><%= ingredient.name %> results</h4>
-      <ul>
-        <%= for result <- search_results["list"]["item"] do %>
-          <li><%= result["name"] %>, <%= result["ndbno"] %></li>
-        <% end %>
-      </ul>
-    </li>
-  <% end %>
-</ul>
+<h2>Nutrition Search for <%= @recipe.name %></h2>
 
+<%= form_for @changeset, recipe_path(@conn, :update, @recipe), fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= inputs_for f, :ingredients, fn i -> %>
+    <h3><%= ingredient_title(@nutrition_search, i.index) %></h3>
+    <%= inputs_for i, :ingredient_nutrition, fn nu -> %>
+      <div class="form-group">
+        <%= for result <- search_options(@nutrition_search, i.index) do %>
+          <div>
+            <%= label nu, "ndbno_#{result["ndbno"]}", class: "checkbox-inline" do %>
+              <%= radio_button nu, :ndbno, result["ndbno"] %> <%= result["name"] %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+
+  <%= link "Back", to: recipe_path(@conn, :index) %>
+<%= end %>
