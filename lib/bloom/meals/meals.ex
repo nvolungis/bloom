@@ -21,6 +21,13 @@ defmodule Bloom.Meals do
     |> Repo.preload([ingredients: :ingredient_nutrition])
   end
 
+  def get_nutrition(recipe) do
+    recipe.ingredients
+    |> Enum.map(&(&1.ingredient_nutrition.ndbno))
+    |> Enum.reject(&is_nil/1)
+    |> NutrientAPI.get_reports()
+  end
+
   def create_recipe(attrs \\ %{}) do
     %Recipe{}
     |> Recipe.changeset(attrs)
@@ -33,9 +40,9 @@ defmodule Bloom.Meals do
       |> Recipe.changeset(attrs)
       |> Ecto.Changeset.cast_assoc(:ingredients, with: &ingredient_with_assoc_changeset/2)
 
-    changeset
-    |> get_nutrition_changes()
-    |> add_new_nutrition_data(changeset)
+    # changeset
+    # |> get_nutrition_changes()
+    # |> add_new_nutrition_data(changeset)
 
     Repo.update(changeset)
   end
@@ -81,11 +88,12 @@ defmodule Bloom.Meals do
             nutrition_changes -> Ecto.Changeset.get_change(nutrition_changes, :ndbno)
           end
         end)
-    end |> Enum.reject(&is_nil/1)
+    end |> Enum.reject(&is_nil/1) |> IO.inspect
   end
 
   defp add_new_nutrition_data(ingredient_ndbnos, recipe_changeset) do
-    ingredient_ndbnos
+    IO.inspect("dbs")
+    ingredient_ndbnos |> IO.inspect
     |> NutrientAPI.get_reports()
     |> IO.inspect
     recipe_changeset

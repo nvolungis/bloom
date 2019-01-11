@@ -23,7 +23,22 @@ defmodule Bloom.Meals.NutrientAPI do
 
   def get_reports(ndbnos) do
     case get("/V2/reports?#{build_report_query(ndbnos)}") do
-      {:ok, resp} -> resp.body["foods"]
+      {:ok, resp} ->
+        Enum.map(resp.body["foods"], fn food ->
+          %{
+             name: food["food"]["desc"]["name"],
+             ndbno: food["food"]["desc"]["ndbno"],
+             nutrients: Enum.map(food["food"]["nutrients"], fn nutrient ->
+               %{
+                  nid: nutrient["nutrient_id"],
+                  name: nutrient["name"],
+                  unit: nutrient["unit"],
+                  value: nutrient["value"],
+                  measures: nutrient["measures"],
+               }
+             end)
+          }
+        end)
       {:error, error} ->
         IO.inspect(error)
         nil
@@ -35,7 +50,7 @@ defmodule Bloom.Meals.NutrientAPI do
       format: "json",
       q: term,
       sort: "n",
-      max: 20,
+      max: 40,
       offset: 0,
       api_key: @token,
       ds: "Standard Reference"
@@ -49,7 +64,7 @@ defmodule Bloom.Meals.NutrientAPI do
 
     URI.encode_query(%{
       format: "json",
-      type: "f",
+      type: "b",
       api_key: @token,
     }) <> "&" <> ndbnos_params
   end

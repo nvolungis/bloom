@@ -1,7 +1,6 @@
 <h2>Show Recipe</h2>
 
 <ul>
-
   <li>
     <strong>Name:</strong>
     <%= @recipe.name %>
@@ -26,6 +25,30 @@
        <%= if ingredient.ingredient_nutrition do %>
          <%= ingredient.ingredient_nutrition.ndbno %>
        <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<h3>Ingredient Nutrients</h3>
+<ul>
+  <%= for food <- @nutrition do %>
+    <li>
+      <%= food.name %>
+      <ul>
+        <%= for nutrient <- food.nutrients do %>
+          <li>
+            <%= nutrient.name %>: <%= nutrient.value %><%= nutrient.unit %>
+              <ul>
+              <%= for measure <- nutrient.measures do %>
+              <li><%= measure["qty"] %> <%= measure["label"] %>
+                  (<%= measure["eqv"] %><%= measure["eunit"] %>)
+                  <%= measure["value"] %><%= nutrient.unit %>
+              </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
     </li>
   <% end %>
 </ul>

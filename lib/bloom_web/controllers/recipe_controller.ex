@@ -27,7 +27,8 @@ defmodule BloomWeb.RecipeController do
 
   def show(conn, %{"id" => id}) do
     recipe = Meals.get_recipe!(id)
-    render(conn, "show.html", recipe: recipe)
+    nutrition = Meals.get_nutrition(recipe)
+    render(conn, "show.html", recipe: recipe, nutrition: nutrition)
   end
 
   def edit(conn, %{"id" => id}) do
