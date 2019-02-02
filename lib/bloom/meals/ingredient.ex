@@ -14,7 +14,6 @@ defmodule Bloom.Meals.Ingredient do
     timestamps()
   end
 
-  @doc false
   def changeset(ingredient, attrs) do
     ingredient
     |> cast(attrs, [:name, :quantity, :unit, :delete])

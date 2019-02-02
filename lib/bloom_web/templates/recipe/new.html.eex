@@ -2,4 +2,16 @@
 
 <%= render "form.html", Map.put(assigns, :action, recipe_path(@conn, :create)) %>
 
+<%= if @foods do %>
+  <ul>
+  <%= for food <- @foods do %>
+    <li>
+      <%= food["food_name"] %>,
+      <%= food["serving_unit"] %>
+      (<%= food["serving_weight_grams"] %>g)
+    </li>
+  <% end %>
+  </ul>
+<% end %>
+
 <span><%= link "Back", to: recipe_path(@conn, :index) %></span>

@@ -7,6 +7,7 @@ defmodule Bloom.Meals.Recipe do
     field :link, :string
     field :name, :string
     field :servings, :integer
+    field :query, :string, virtual: true
     has_many :ingredients, Ingredient
 
     timestamps()
@@ -15,7 +16,7 @@ defmodule Bloom.Meals.Recipe do
   @doc false
   def changeset(recipe, attrs) do
     recipe
-    |> cast(attrs, [:name, :link, :servings])
+    |> cast(attrs, [:name, :link, :servings, :query])
     |> validate_required([:name, :link, :servings])
   end
 end

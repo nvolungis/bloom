@@ -23,13 +23,19 @@
     <%= error_tag f, :servings %>
   </div>
 
+  <div class="form-group">
+    <%= label f, :query, class: "control-label" %>
+    <%= textarea f, :query, class: "form-control" %>
+    <%= error_tag f, :query %>
+  </div>
+
   <h3>Ingredients</h3>
 
   <%= render BloomWeb.RecipeView, "_ingredient_fields.html", f: f %>
 
-  <p>
-    <%= link_to_ingredient_fields %>
-  </p>
+  <%# <p> %>
+  <%#   <%= link_to_ingredient_fields %1> %>
+  <%# </p> %>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>

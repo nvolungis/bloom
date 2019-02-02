@@ -6,6 +6,7 @@ defmodule Bloom.Meals do
     Ingredient,
     IngredientNutrition,
     NutrientAPI,
+    NutritionixAPI,
     Recipe,
   }
 
@@ -36,15 +37,10 @@ defmodule Bloom.Meals do
   end
 
   def update_recipe(%Recipe{} = recipe, attrs) do
-    changeset = recipe
-      |> Recipe.changeset(attrs)
-      |> Ecto.Changeset.cast_assoc(:ingredients, with: &ingredient_with_assoc_changeset/2)
-
-    # changeset
-    # |> get_nutrition_changes()
-    # |> add_new_nutrition_data(changeset)
-
-    Repo.update(changeset)
+    recipe
+    |> Recipe.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:ingredients, with: &ingredient_with_assoc_changeset/2)
+    |> Repo.update()
   end
 
   def delete_recipe(%Recipe{} = recipe) do
@@ -53,6 +49,11 @@ defmodule Bloom.Meals do
 
   def change_recipe(%Recipe{} = recipe) do
     Recipe.changeset(recipe, %{})
+  end
+
+  def itemize_recipe(query) do
+    {:ok, resp} = query |> NutritionixAPI.search()
+    resp.body
   end
 
   def search_recipe_nutrition(%Recipe{} = recipe) do
@@ -92,8 +93,8 @@ defmodule Bloom.Meals do
   end
 
   defp add_new_nutrition_data(ingredient_ndbnos, recipe_changeset) do
-    IO.inspect("dbs")
-    ingredient_ndbnos |> IO.inspect
+    ingredient_ndbnos
+    |> IO.inspect
     |> NutrientAPI.get_reports()
     |> IO.inspect
     recipe_changeset

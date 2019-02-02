@@ -15,14 +15,28 @@ defmodule BloomWeb.RecipeController do
   end
 
   def create(conn, %{"recipe" => recipe_params}) do
-    case Meals.create_recipe(recipe_params) do
-      {:ok, recipe} ->
-        conn
-        |> put_flash(:info, "Recipe created successfully.")
-        |> redirect(to: recipe_path(conn, :show, recipe))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
+    foods = recipe_params["query"]
+    |> Meals.itemize_recipe()
+    |> Access.get("foods")
+
+    recipe = Meals.change_recipe(%Recipe{ingredients: Enum.map(foods, fn food -> 
+      Meals.change_ingredient(%Ingredient{
+        name: food["food_name"],
+        quantity: food["serving_weight_grams"],
+        unit: "g",
+      })
+    end)})
+
+    render(conn, "new.html", changeset: recipe, foods: foods)
+
+#     case Meals.create_recipe(recipe_params) do
+#       {:ok, recipe} ->
+#         conn
+#         |> put_flash(:info, "Recipe created successfully.")
+#         |> redirect(to: recipe_path(conn, :show, recipe))
+#       {:error, %Ecto.Changeset{} = changeset} ->
+#         render(conn, "new.html", changeset: changeset)
+#     end
   end
 
   def show(conn, %{"id" => id}) do
